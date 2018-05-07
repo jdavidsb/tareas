@@ -49,11 +49,17 @@
                       <table class="table">
                         @forelse ($tareas as $tarea)
                           <tr>
-                            <td>{{ $tarea->texto }}</td>
+                            <td width="65%">{{ $tarea->texto }}</td>
                             <td>{{ $tarea->estado }}</td>
-                            <td>
+                            <td class="text-right">
                               {{-- Aquí vienen los botones para cada tarea (esto es un comentario de blade) --}}
-
+                              @if($tarea->estado == 'Pendiente')
+                                <a href="{{ url('/cambiar-estado', [$tarea->id, 1]) }}" class="btn btn-success btn-sm"> <i class="fa fa-play fa-fw"></i> </a>
+                              @endif
+                              @if ($tarea->estado == 'En proceso')
+                                <a href="{{ url('/cambiar-estado', [$tarea->id, 2]) }}" class="btn btn-primary btn-sm"> <i class="fa fa-check fa-fw"></i> </a>
+                              @endif
+                              <a href="{{ url('/eliminar', [$tarea->id]) }}" class="btn btn-danger btn-sm"> <i class="fa fa-trash fa-fw"></i> </a>
                             </td>
                           </tr>
                         @empty
@@ -63,6 +69,12 @@
                     </div>
 
                 </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="text-center">
+                {{ $tareas->links() }}
+              </div>
             </div>
         </div>
     </div>

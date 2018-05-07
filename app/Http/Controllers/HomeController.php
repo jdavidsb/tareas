@@ -27,6 +27,8 @@ class HomeController extends Controller
     {
         # Aquí le indicamos que me recoja todas las tareas del usuario logado
         $tareas = Task::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(5);
+        # Crear una variable de session
+        # session(['user_id' => Auth::id(), 'nombre' => Auth::user()->name]);
         return view('home', ['tareas' => $tareas]);
     }
 
@@ -34,12 +36,16 @@ class HomeController extends Controller
       $tarea = new Task();
       $tarea->texto = $formulario->texto;
       $tarea->user_id = Auth::id();
+      # Para usar mis nuevas variables de session solo tendría que:
+      # $tarea->user_id = session('user_id');
       $tarea->save();
+      session()->flash('msg', 'La tarea se ha creado correctamente');
       return redirect('/home');
     }
 
     public function cambiarEstado($id, $estado){
       if(!isset($id) || !isset($estado)){
+        session()->flash('msg', 'No se ha podido realizar la operación');
         return redirect('/home');
       }
 
@@ -55,18 +61,21 @@ class HomeController extends Controller
             break;
         }
         $tarea->save();
+        session()->flash('msg', 'Tarea modificada correctamente');
       }
       return redirect('/home');
     }
 
     public function eliminar($id){
       if(!isset($id)){
+        session()->flash('msg', 'No se ha podido realizar la operación');
         return redirect('/home');
       }
 
       $tarea = Task::find($id);
       if($tarea->user_id === Auth::id()){
         $tarea->delete();
+        session()->flash('msg', 'Tarea eliminada correctamente');
       }
       return redirect('/home');
     }

@@ -30,7 +30,7 @@ return [
     */
 
     'lifetime' => env('SESSION_LIFETIME', 120),
-
+    /* Esta variable sirve para hacer que cuando se cierre el navegador se cierre la session */
     'expire_on_close' => false,
 
     /*
@@ -43,8 +43,8 @@ return [
     | automatically by Laravel and you can use the Session like normal.
     |
     */
-
-    'encrypt' => false,
+    /* poner a true para que el contenido de los archivos de session aparezcan encriptados */
+    'encrypt' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
     | location may be specified. This is only needed for file sessions.
     |
     */
-
+    /* Aquí definiremos en que ruta se guardarán los archivos de session */
     'files' => storage_path('framework/sessions'),
 
     /*

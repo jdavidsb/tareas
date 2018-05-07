@@ -48,7 +48,15 @@
                     <div class="panel-bldy">
                       <table class="table">
                         @forelse ($tareas as $tarea)
-                          <tr>
+                          <!-- En teoría según el estado, el css me cambiará el fondo de la línea de la tarea, NO SE POR QUE NO FUNCIONA -->
+                          @if ($tarea->estado === 'En proceso')
+                            <tr class="success">
+                          @elseif ($tarea->estado === 'Completada')
+                            <tr class="info">
+                          @else
+                            <tr class="active">
+                          @endif
+
                             <td width="65%">{{ $tarea->texto }}</td>
                             <td>{{ $tarea->estado }}</td>
                             <td class="text-right">

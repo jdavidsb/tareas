@@ -40,12 +40,15 @@ class HomeController extends Controller
       # $tarea->user_id = session('user_id');
       $tarea->save();
       session()->flash('msg', 'La tarea se ha creado correctamente');
+      session()->flash('tipoAlert', 'success');
       return redirect('/home');
     }
 
-    public function cambiarEstado($id, $estado){
+    public function cambiarEstado($id = null, $estado = null){
       if(!isset($id) || !isset($estado)){
         session()->flash('msg', 'No se ha podido realizar la operación');
+        # control del color del alert
+        session()->flash('tipoAlert', 'danger');
         return redirect('/home');
       }
 
@@ -62,13 +65,15 @@ class HomeController extends Controller
         }
         $tarea->save();
         session()->flash('msg', 'Tarea modificada correctamente');
+        session()->flash('tipoAlert', 'success');
       }
       return redirect('/home');
     }
 
-    public function eliminar($id){
+    public function eliminar($id = null){
       if(!isset($id)){
         session()->flash('msg', 'No se ha podido realizar la operación');
+        session()->flash('tipoAlert', 'danger');
         return redirect('/home');
       }
 
@@ -76,6 +81,7 @@ class HomeController extends Controller
       if($tarea->user_id === Auth::id()){
         $tarea->delete();
         session()->flash('msg', 'Tarea eliminada correctamente');
+        session()->flash('tipoAlert', 'success');
       }
       return redirect('/home');
     }

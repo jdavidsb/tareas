@@ -33,6 +33,16 @@ class HomeController extends Controller
     }
 
     public function crearTarea(Request $formulario){
+      /*
+      $validateData = $formulario->validate([
+
+      ]);
+      */
+      $this->validate($formulario, [
+        # bail sirve para que en cuanto haya una validación que no se cumple, no siga comprobando lo demás
+        'texto' => 'bail|required|string|max:191'
+      ]);
+
       $tarea = new Task();
       $tarea->texto = $formulario->texto;
       $tarea->user_id = Auth::id();

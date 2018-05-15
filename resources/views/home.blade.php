@@ -7,17 +7,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Crear tarea</h4>
+        <h4 class="modal-title" id="myModalLabel">{{ __('messages.create') }}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <form action="{{ url('crear-tarea') }}" method="post">
         {{ csrf_field() }}
         <div class="modal-body">
-          <input type="text" name="texto" class="form-control" placeholder="Escribe tu tarea">
+          <input type="text" name="texto" class="form-control" placeholder="{{ __('messages.writeTask') }}">
 
         </div>
         <div class="modal-footer">
-          <input type="submit" class="btn btn-primary" value="Guardar">
+          <input type="submit" class="btn btn-primary" value="{{ __('messages.save') }}">
         </div>
       </form>
     </div>
@@ -30,13 +30,13 @@
           <div class="text-right">
             {{-- CREAMOS UN BOTÓN PARA ABRIR UNA VENTANA MODAL --}}
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#creatTarea">
-              <i class="fa fa-plus fa-fw"></i> Tarea
+              <i class="fa fa-plus fa-fw"></i> {{ __('messages.task') }}
             </button>
           </div>
           <br>
 
             <div class="card">
-                <div class="card-header">Mis tareas</div>
+                <div class="card-header">{{ __('messages.mytasks') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -58,7 +58,16 @@
                           @endif
 
                             <td width="65%">{{ $tarea->texto }}</td>
-                            <td>{{ $tarea->estado }}</td>
+                            <td>
+                              {{-- $tarea->estado --}}
+                              @if($tarea->estado === 'Pendiente')
+                                {{ __('messages.pending') }}
+                              @elseif($tarea->estado === 'En proceso')
+                                {{ __('messages.process') }}
+                              @else
+                                {{ __('messages.completed') }}
+                              @endif
+                            </td>
                             <td class="text-right">
                               {{-- Aquí vienen los botones para cada tarea (esto es un comentario de blade) --}}
                               @if($tarea->estado == 'Pendiente')
@@ -71,7 +80,7 @@
                             </td>
                           </tr>
                         @empty
-                          <h3>No hay tareas para mostrar</h3>
+                          <h3>{{ __('messages.notask') }}</h3>
                         @endforelse
                       </table>
                     </div>

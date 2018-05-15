@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Task;
 use Auth;
+use App;
 
 class HomeController extends Controller
 {
@@ -15,6 +16,15 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+        ### AL DEFINIR EL IDIOMA EN EL MÉTODO CONSTRUCTOR ME ASEGURO DE QUE FUNCIONA PARA TODOS LOS MÉTODOS
+        $this->middleware(function($request, $next){
+          ### Si no defino el middleware en el método constructor, debería poner el código siguiente al principio de cada método
+          if(session()->has('idioma')){
+            App::setLocale(session()->get('idioma'));
+          }
+          return $next($request);
+        });
+
         $this->middleware('auth');
     }
 

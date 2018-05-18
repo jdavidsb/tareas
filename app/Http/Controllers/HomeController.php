@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use App\User;
 use Auth;
 use App;
+use Hash;
+
 
 class HomeController extends Controller
 {
@@ -61,7 +64,7 @@ class HomeController extends Controller
       $tarea->save();
       session()->flash('msg', 'La tarea se ha creado correctamente');
       session()->flash('tipoAlert', 'success');
-      return redirect('/home');
+      return redirect()->route('inicio');
     }
 
     public function cambiarEstado($id = null, $estado = null){
@@ -69,7 +72,7 @@ class HomeController extends Controller
         session()->flash('msg', 'No se ha podido realizar la operación');
         # control del color del alert
         session()->flash('tipoAlert', 'danger');
-        return redirect('/home');
+        return redirect()->route('incio');
       }
 
       $tarea = Task::find($id);
@@ -87,14 +90,15 @@ class HomeController extends Controller
         session()->flash('msg', 'Tarea modificada correctamente');
         session()->flash('tipoAlert', 'success');
       }
-      return redirect('/home');
+      #return redirect('/home');
+      return redirect()->route('inicio');
     }
 
     public function eliminar($id = null){
       if(!isset($id)){
         session()->flash('msg', 'No se ha podido realizar la operación');
         session()->flash('tipoAlert', 'danger');
-        return redirect('/home');
+        return redirect()->route('inicio');
       }
 
       $tarea = Task::find($id);
@@ -103,6 +107,39 @@ class HomeController extends Controller
         session()->flash('msg', 'Tarea eliminada correctamente');
         session()->flash('tipoAlert', 'success');
       }
-      return redirect('/home');
+      return redirect()->route('inicio');
+    }
+
+    public function showConfig(){
+      return view('config');
+    }
+
+    public function cambiarPass(Request $request){
+      ## HACEMOS LA VALIDACIÓN DEL FORMULARIO - REQUEST SON LOS DATOS DEL FORMULARIO
+      $this->validate($request, [
+        'oldPass' => 'required|string',
+        'newPass1' => 'required|string|min:8',
+        'newPass2' => 'required|string|min:8',
+      ]);
+
+      # VALIDAR SI LA CONTRASEÑA INTRODUCIDA EN EL FORMULARIO ES IGUAL A LA DE LA BASE DE DATOS
+      if(Hash::check($request->oldPass, Auth::user()->password)){
+        if($request->newPass1 === $request->newPass2){
+          # INSTANCIAR LA CLASE USUARIO QUE ESTA LOGADO ACTUALMENTE
+          $usuario = User::find(Auth::id());
+          # METER EN EL CAMPO PASSWORD LA CONTRASEÑA HASEADA
+          $usuario->password = Hash::make($request->newPass1);
+          $usuario->save();
+          session()->flash('msg', __('messages.modPassOk'));
+          session()->flash('tipoAlert', 'success');
+        }else{
+          session()->flash('msg', __('messages.modPassErr'));
+          session()->flash('tipoAlert', 'danger');
+        }
+      }else{
+        session()->flash('msg', __('messages.errPass'));
+        session()->flash('tipoAlert', 'danger');
+      }
+      return redirect()->route('config');
     }
 }

@@ -69,7 +69,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">{{ __('messages.home') }}</a>
+                        <a href="{{ url('/home') }}">{{ __('messages.inicio') }}</a>
                     @else
                         <a href="{{ route('login') }}">{{ __('messages.login') }}</a>
                         <a href="{{ route('register') }}">{{ __('messages.register') }}</a>

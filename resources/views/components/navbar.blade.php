@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+<nav class="navbar navbar-expand-md navbar-light navbar-laravel" style="background-color: #e3f2fd;">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ route('welcome') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-              
+              <li><a href="{{ route('inicio') }}"> {{ __('messages.inicio') }} </a></li>
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -20,12 +20,17 @@
                     <li><a class="nav-link" href="{{ route('login') }}">{{ __('messages.login') }}</a></li>
                     <li><a class="nav-link" href="{{ route('register') }}">{{ __('messages.register') }}</a></li>
                 @else
+
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
+
+
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('config') }}">{{ __('messages.configuration') }}</a>
+                            <hr>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
@@ -45,9 +50,11 @@
                   {{ __('messages.lang') }} <span class="caret"></span> {{-- session()->get('idioma') --}} {{-- App::getLocale() --}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a href="{{ url('/idioma/es') }}"><img src="{{ asset('img/spain.png') }}" alt="{{ __('messages.spanish') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.spanish') }}</a>
+                  <a href="{{ route('idioma', ['es']) }}"><img src="{{ asset('img/spain.png') }}" alt="{{ __('messages.spanish') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.spanish') }}</a>
+                  {{-- <a href="{{ url('/idioma/es') }}"><img src="{{ asset('img/spain.png') }}" alt="{{ __('messages.spanish') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.spanish') }}</a> --}}
                   <br>
-                  <a href="{{ url('/idioma/en') }}"><img src="{{ asset('img/uk.png') }}" alt="{{ __('messages.english') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.english') }}</a>
+                  <a href="{{ route('idioma', ['en']) }}"><img src="{{ asset('img/uk.png') }}" alt="{{ __('messages.english') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.english') }}</a>
+                  {{-- <a href="{{ url('/idioma/en') }}"><img src="{{ asset('img/uk.png') }}" alt="{{ __('messages.english') }}" width="40" height="30" class="img-rounded center-block">{{ __('messages.english') }}</a> --}}
                 </div>
               </li>
             </ul>

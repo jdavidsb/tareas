@@ -10,7 +10,7 @@
         <h4 class="modal-title" id="myModalLabel">{{ __('messages.create') }}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
-      <form action="{{ url('crear-tarea') }}" method="post">
+      <form action="{{ route('crear.tarea') }}" method="post">
         {{ csrf_field() }}
         <div class="modal-body">
           <input type="text" name="texto" class="form-control" placeholder="{{ __('messages.writeTask') }}">
@@ -26,12 +26,19 @@
 {{-- DESARROLLO DE LA VENTANA MODAL --}}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
+          <h1>{{ __('messages.tasks') }}</h1>
+        </div>
+        <div class="col-md-6 text-right">
+          {{-- CREAMOS UN BOTÓN PARA ABRIR UNA VENTANA MODAL --}}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#creatTarea">
+            <i class="fa fa-plus fa-fw"></i> {{ __('messages.task') }}
+          </button>
+        </div>
+
+        <div class="col-md-12">
           <div class="text-right">
-            {{-- CREAMOS UN BOTÓN PARA ABRIR UNA VENTANA MODAL --}}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#creatTarea">
-              <i class="fa fa-plus fa-fw"></i> {{ __('messages.task') }}
-            </button>
+
           </div>
           <br>
 
@@ -71,12 +78,15 @@
                             <td class="text-right">
                               {{-- Aquí vienen los botones para cada tarea (esto es un comentario de blade) --}}
                               @if($tarea->estado == 'Pendiente')
-                                <a href="{{ url('/cambiar-estado', [$tarea->id, 1]) }}" class="btn btn-success btn-sm"> <i class="fa fa-play fa-fw"></i> </a>
+                                {{-- <a href="{{ url('/cambiar-estado', [$tarea->id, 1]) }}" class="btn btn-success btn-sm"> <i class="fa fa-play fa-fw"></i> </a> --}}
+                                <a href="{{ route('cambiar.estado', [$tarea->id, 1]) }}" class="btn btn-success btn-sm"> <i class="fa fa-play fa-fw"></i> </a>
                               @endif
                               @if ($tarea->estado == 'En proceso')
-                                <a href="{{ url('/cambiar-estado', [$tarea->id, 2]) }}" class="btn btn-primary btn-sm"> <i class="fa fa-check fa-fw"></i> </a>
+                                {{-- <a href="{{ url('/cambiar-estado', [$tarea->id, 2]) }}" class="btn btn-primary btn-sm"> <i class="fa fa-check fa-fw"></i> </a> --}}
+                                <a href="{{ route('cambiar.estado', [$tarea->id, 2]) }}" class="btn btn-primary btn-sm"> <i class="fa fa-check fa-fw"></i> </a>
                               @endif
-                              <a href="{{ url('/eliminar', [$tarea->id]) }}" class="btn btn-danger btn-sm"> <i class="fa fa-trash fa-fw"></i> </a>
+                              {{-- <a href="{{ url('/eliminar', [$tarea->id]) }}" class="btn btn-danger btn-sm"> <i class="fa fa-trash fa-fw"></i> </a> --}}
+                              <a href="{{ route('eliminar', [$tarea->id]) }}" class="btn btn-danger btn-sm"> <i class="fa fa-trash fa-fw"></i> </a>
                             </td>
                           </tr>
                         @empty

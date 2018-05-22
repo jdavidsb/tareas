@@ -17,6 +17,11 @@ Route::get('/idioma/{id}', function($id){
 })->name('idioma');
 Route::get('/config', 'HomeController@showConfig')->name('config');
 
+Route::group(['prefix' => 'auth'], function () {
+    Route::get('/{provider}', 'Auth\LoginController@redirectToProvider');
+    Route::get('/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+});
+
 ### RUTAS POST
 #Route::post('/crear-tarea', 'HomeController@crearTarea');
 ## le añadimos un nombre de ruta y llamamos a la ruta por su nombre en el home.blade.php

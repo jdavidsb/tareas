@@ -26,4 +26,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function tasks(){
+      ### LE INDICAMOS QUE UN USUARIO PUEDE TENER MUCHOS Task
+      return $this->hasMany('App\Task');
+    }
 }

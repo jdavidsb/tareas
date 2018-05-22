@@ -39,7 +39,10 @@ class HomeController extends Controller
     public function index()
     {
         # Aquí le indicamos que me recoja todas las tareas del usuario logado
-        $tareas = Task::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(5);
+        # PODREMOS SUSTITUIR ESTA CONSULTA POR
+        // $tareas = Task::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(5);
+        # LAS MODIFICACIONES EN LOS MODELOS User y Task NOS PERMITIRÁN HACER LO SIGUIENTE
+        $tareas = User::find(Auth::id())->tasks()->orderBy('created_at', 'desc')->paginate(5);
         # Crear una variable de session
         # session(['user_id' => Auth::id(), 'nombre' => Auth::user()->name]);
         return view('home', ['tareas' => $tareas]);
@@ -56,12 +59,20 @@ class HomeController extends Controller
         'texto' => 'bail|required|string|max:191'
       ]);
 
-      $tarea = new Task();
-      $tarea->texto = $formulario->texto;
-      $tarea->user_id = Auth::id();
+      // $tarea = new Task();
+      // $tarea->texto = $formulario->texto;
+      // $tarea->user_id = Auth::id();
       # Para usar mis nuevas variables de session solo tendría que:
       # $tarea->user_id = session('user_id');
-      $tarea->save();
+      // $tarea->save();
+
+      # Instancio la tarea y le meto array del campo que necesito para crearla
+      $tarea = new Task(['texto' => $formulario->texto]);
+      # Instancio el usuario
+      $usuario = User::find(Auth::id());
+      # El usuario es el que crea la nueva tarea
+      $usuario->tasks()->save($tarea);
+
       session()->flash('msg', 'La tarea se ha creado correctamente');
       session()->flash('tipoAlert', 'success');
       return redirect()->route('inicio');

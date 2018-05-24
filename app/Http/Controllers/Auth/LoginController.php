@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
+use Log;
 ### PARA USAR EL MAIL TENGO QUE USAR LOS PLUYING
 #use Mail;
 
@@ -69,6 +70,7 @@ class LoginController extends Controller
         try{
             $user = Socialite::driver($provider)->user();
         } catch (\GuzzleHttp\Exception\ClientException $e) {
+            Log::notice('Datos de acceso incorrectos');
             abort(403, 'Unauthorized action.');
             return redirect()->to('/');
         }

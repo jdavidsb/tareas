@@ -8,6 +8,7 @@ use App\User;
 use Auth;
 use App;
 use Hash;
+use Log;
 
 
 class HomeController extends Controller
@@ -117,6 +118,14 @@ class HomeController extends Controller
         $tarea->delete();
         session()->flash('msg', 'Tarea eliminada correctamente');
         session()->flash('tipoAlert', 'success');
+      }else{
+        Log::notice('Intento de eliminación fallido', [
+          'id' => Auth::id(),
+          'nombre' => Auth::user()->name,
+          'email' => Auth::user()->email,
+          'tarea' => $id,
+          'tarea_user' => $tarea->user_id,
+        ]);
       }
       return redirect()->route('inicio');
     }
